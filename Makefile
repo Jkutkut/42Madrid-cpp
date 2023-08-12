@@ -21,6 +21,7 @@ template: template_repo/template
 	cp template_repo/template .
 
 # project script
+.PHONY: toolkit/target/debug/toolkit toolkit/target/release/toolkit
 
 toolkit/target/debug/toolkit:
 	make -C toolkit build_dev
