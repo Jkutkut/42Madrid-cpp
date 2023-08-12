@@ -7,6 +7,8 @@ else
 	PWD = $(shell pwd)
 endif
 
+all: usage
+
 # Template script
 
 template_repo:
@@ -20,3 +22,33 @@ template: template_repo/template
 
 # project script
 
+toolkit/target/debug/toolkit:
+	make -C toolkit build_dev
+toolkit/target/release/toolkit:
+	make -C toolkit build_release_binary
+
+./toolkit_script: toolkit/target/debug/toolkit
+#./toolkit: toolkit/target/release/toolkit
+	cp $< $@
+
+# project
+
+clean:
+	rm -rf template_repo
+
+fclean: clean
+	rm -f template
+	rm -f toolkit_script
+
+# ------------ Commands ------------
+
+usage:
+	@echo "Usage: make [command]"
+	@echo ""
+	@echo "Commands:"
+	@echo "  new_project: Create a new project"
+	@echo "  clean: Remove all generated files"
+	@echo "  fclean: Remove all generated files and downloaded files"
+
+next_project: ./toolkit_script
+	./$< new_project
