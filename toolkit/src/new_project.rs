@@ -1,5 +1,6 @@
-use crate::*;
 use open;
+
+use crate::*;
 
 pub fn new_project(
     args: Vec<String>
@@ -11,33 +12,14 @@ pub fn new_project(
             return;
         }
     }
-    // Obtain all the directories called cpp0* in the current directory
-    let dirs = std::fs::read_dir(".").unwrap()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().unwrap().is_dir())
-        .filter(|e| e.file_name().to_str().unwrap().starts_with("cpp0"))
-        .collect::<Vec<_>>();
-    let mut highest = -1;
-    for dir in dirs.iter() {
-        let name = dir.file_name();
-        let num = match name.to_str().unwrap()[4..].parse::<i32>() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-        if num > highest {
-            highest = num;
-        }
-    }
-    highest += 1;
-    if highest >= 9 {
-        eprintln!("All projects have been created");
-        return;
-    }
+    let highest = match get_project_number() {
+        Some(num) => num,
+        None => return,
+    };
     let repo_name = format!("cpp0{}", highest);
-    println!("Next project: {}", repo_name);
 
     // Ask the user to create a new repository
-    println!("A new repository is needed. Open the browser to do so?");
+    println!("Let's link the repository. Do you want to open the browser to do so?");
     if confirm("Open browser?") {
         let url = "https://github.com/new";
         match open::that(url) {
@@ -78,62 +60,29 @@ pub fn new_project(
     eprintln!("TODO: new_project");
 }
 
-
-use std::io::Write;
-fn read_line() -> String {
-    let mut input = String::new();
-    match std::io::stdin().read_line(&mut input) {
-        Ok(_) => {},
-        Err(e) => {
-            eprintln!("Error reading stdin: {}", e);
-            std::process::exit(1);
+fn get_project_number(
+) -> Option<i32> {
+    // Obtain all the directories called cpp0* in the current directory
+    let dirs = std::fs::read_dir(".").unwrap()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.file_type().unwrap().is_dir())
+        .filter(|e| e.file_name().to_str().unwrap().starts_with("cpp0"))
+        .collect::<Vec<_>>();
+    let mut highest = -1;
+    for dir in dirs.iter() {
+        let name = dir.file_name();
+        let num = match name.to_str().unwrap()[4..].parse::<i32>() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+        if num > highest {
+            highest = num;
         }
     }
-    input.trim().to_string()
-}
-
-fn prompt_question(
-    question: &str
-) {
-    print!("{} ", question);
-    if let Err(e) = std::io::stdout().flush() {
-        eprintln!("Error flushing stdout: {}", e);
-        std::process::exit(1);
+    highest += 1;
+    if highest >= 9 {
+        eprintln!("All projects have been created");
+        return None;
     }
-}
-
-fn ask(
-    question: &str
-) -> String {
-    prompt_question(question);
-    read_line()
-}
-
-fn confirm(
-    question: &str
-) -> bool {
-    let r = ask(format!("{} [y/n]", question).as_str());
-    match r.to_lowercase().as_str() {
-        "y" | "yes" => true,
-        _ => false,
-    }
-}
-
-fn acknowledge(
-    question: &str
-) {
-    prompt_question(question);
-    let _ = read_line();
-}
-
-fn ask_or_default(
-    question: &str,
-    default: String
-) -> String {
-    let r = ask(format!("{} [{}]", question, default).as_str());
-    if r.is_empty() {
-        default
-    } else {
-        r
-    }
+    Some(highest)
 }

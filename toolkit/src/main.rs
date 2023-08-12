@@ -1,8 +1,10 @@
 mod new_project;
 mod model;
+mod tui;
 
 use new_project::new_project;
 use model::*;
+use tui::*;
 
 
 fn main() {
