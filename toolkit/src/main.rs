@@ -6,7 +6,6 @@ use new_project::new_project;
 use model::*;
 use tui::*;
 
-
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 

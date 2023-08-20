@@ -11,7 +11,7 @@ REPO = $(shell echo ${DIR} | sed 's/.*\///' | tr '[:upper:]' '[:lower:]')
 # ****** Rust Constants ******
 CARGO = /root/.cargo/bin/cargo
 CODE_VOLUME = -v ${DIR}:/${REPO}
-CARGO_REGISTRY = -v toolkit_cargo_registy:/root/.cargo/registry
+CARGO_REGISTRY = -v rust_cargo_registry:/root/.cargo/registry
 
 # ****** Docker Constants ******
 DOCKER_RUN = docker run --rm

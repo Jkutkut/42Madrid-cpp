@@ -21,11 +21,11 @@ template: template_repo/template
 	cp template_repo/template .
 
 # project script
-.PHONY: toolkit/target/debug/toolkit toolkit/target/release/toolkit
+TOOLKIT_SRC = $(wildcard toolkit/src/*.rs)
 
-toolkit/target/debug/toolkit:
+toolkit/target/debug/toolkit: $(TOOLKIT_SRC)
 	make -C toolkit build_dev
-toolkit/target/release/toolkit:
+toolkit/target/release/toolkit: $(TOOLKIT_SRC)
 	make -C toolkit build_release_binary
 
 ./toolkit_script: toolkit/target/debug/toolkit
