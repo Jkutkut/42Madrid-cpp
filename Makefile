@@ -1,3 +1,5 @@
+.PHONY: all clean fclean usage
+
 OS = $(shell uname -s)
 
 # Define PWD
@@ -53,3 +55,6 @@ usage:
 
 next_project: ./toolkit_script
 	./$< new_project
+
+terminal_cpp:
+	docker run -it --rm -v $(PWD):/docker jkutkut/docker4c
