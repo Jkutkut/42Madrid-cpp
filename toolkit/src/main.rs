@@ -1,10 +1,13 @@
-mod new_project;
 mod model;
 mod tui;
 
-use new_project::new_project;
+mod new_project;
+mod new_exercise;
+
 use model::*;
 use tui::*;
+use new_project::new_project;
+use new_exercise::new_exercise;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -24,6 +27,7 @@ fn main() {
 
     match cmd {
         Command::NewProject => new_project(args),
+        Command::NewExercise => new_exercise(args)
     }
 }
 
@@ -33,4 +37,5 @@ fn usage() {
 
     println!("Commands:");
     println!("  new_project: Create a new project");
+    println!("  new_exercise: Create a new exercise");
 }
