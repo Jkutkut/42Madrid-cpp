@@ -2,6 +2,7 @@
 pub enum Command {
     NewProject,
     NewExercise,
+    NewClass
 }
 
 impl Command {
@@ -9,6 +10,7 @@ impl Command {
         match s {
             "new_project" => Ok(Command::NewProject),
             "new_exercise" => Ok(Command::NewExercise),
+            "new_class" => Ok(Command::NewClass),
             _ => Err(format!("Unknown command: {}", s)),
         }
     }
